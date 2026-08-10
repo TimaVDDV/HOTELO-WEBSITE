@@ -1,0 +1,1495 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>HOTELØ — Room 01</title>
+
+<style>
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+html {
+    scroll-behavior: smooth;
+}
+
+body {
+    background: #090909;
+    color: #eee;
+    font-family: Arial, Helvetica, sans-serif;
+    overflow-x: hidden;
+}
+
+/* =========================================================
+   STORY
+   ========================================================= */
+
+.story {
+    height: 300vh;
+    position: relative;
+}
+
+.story-screen {
+    position: sticky;
+    top: 0;
+
+    height: 100vh;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    overflow: hidden;
+}
+
+
+/* =========================================================
+   PHONE
+   ========================================================= */
+
+.phone {
+    width: 300px;
+    height: 590px;
+
+    background: #050505;
+
+    border: 7px solid #2b2b2b;
+    border-radius: 38px;
+
+    box-shadow:
+        0 0 0 2px #111,
+        0 30px 80px rgba(0,0,0,.7);
+
+    padding: 20px;
+
+    position: relative;
+
+    transition:
+        transform 1s ease,
+        opacity 1s ease;
+}
+
+
+.phone-top {
+    text-align: center;
+
+    font-size: 11px;
+
+    color: #777;
+
+    margin-bottom: 40px;
+}
+
+
+.messages {
+    display: flex;
+    flex-direction: column;
+
+    gap: 15px;
+}
+
+
+.message {
+    max-width: 85%;
+
+    padding: 13px 15px;
+
+    border-radius: 18px;
+
+    font-size: 14px;
+
+    line-height: 1.4;
+
+    opacity: 0;
+
+    transform: translateY(15px);
+
+    animation:
+        messageIn .8s forwards;
+}
+
+
+.message.me {
+    align-self: flex-end;
+
+    background: #e9e9e9;
+
+    color: #111;
+
+    animation-delay: 1s;
+}
+
+
+.message.parent {
+    align-self: flex-start;
+
+    background: #252525;
+
+    color: white;
+
+    animation-delay: 3s;
+}
+
+
+@keyframes messageIn {
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+
+}
+
+
+/* =========================================================
+   HOTEL
+   ========================================================= */
+
+.hotel {
+    position: absolute;
+
+    inset: 0;
+
+    display: flex;
+    flex-direction: column;
+
+    align-items: center;
+    justify-content: center;
+
+    background:
+        radial-gradient(
+            ellipse at center,
+            #292929 0%,
+            #101010 50%,
+            #050505 100%
+        );
+
+    opacity: 0;
+
+    transform: scale(1.08);
+
+    transition:
+        opacity 2s ease,
+        transform 3s cubic-bezier(.2,.8,.2,1);
+}
+
+
+.hotel.visible {
+    opacity: 1;
+    transform: scale(1);
+}
+
+
+.hotel-name {
+    font-size: clamp(55px, 10vw, 130px);
+
+    letter-spacing: 18px;
+
+    margin-left: 18px;
+
+    font-weight: 700;
+}
+
+
+.hotel-year {
+
+    margin-top: 20px;
+
+    letter-spacing: 7px;
+
+    font-size: 12px;
+
+    color: #777;
+}
+
+
+.hotel-description {
+
+    margin-top: 35px;
+
+    color: #777;
+
+    font-size: 13px;
+
+    letter-spacing: 2px;
+
+    text-align: center;
+}
+
+
+/* =========================================================
+   HOTEL ENTRANCE
+   ========================================================= */
+
+.entrance {
+
+    position: absolute;
+
+    bottom: -20px;
+
+    width: 190px;
+    height: 280px;
+
+    border: 1px solid #444;
+
+    background: #111;
+
+    box-shadow:
+        inset 0 0 40px #000,
+        0 0 80px rgba(255,255,255,.03);
+}
+
+
+.entrance::before {
+
+    content: "";
+
+    position: absolute;
+
+    left: 50%;
+    top: 50%;
+
+    transform: translate(-50%, -50%);
+
+    width: 100px;
+    height: 190px;
+
+    background: #050505;
+
+    border: 1px solid #333;
+}
+
+
+.entrance-light {
+
+    position: absolute;
+
+    top: 20px;
+
+    left: 50%;
+
+    transform: translateX(-50%);
+
+    width: 60px;
+    height: 4px;
+
+    background: #777;
+
+    box-shadow: 0 0 20px #777;
+}
+
+
+/* =========================================================
+   ELEVATOR
+   ========================================================= */
+
+.elevator {
+
+    position: fixed;
+
+    right: 35px;
+    top: 50%;
+
+    transform: translateY(-50%);
+
+    width: 90px;
+    height: 430px;
+
+    z-index: 1000;
+
+    pointer-events: none;
+}
+
+
+.elevator-line {
+
+    position: absolute;
+
+    left: 50%;
+
+    transform: translateX(-50%);
+
+    width: 2px;
+
+    top: 0;
+    bottom: 0;
+
+    background: #333;
+}
+
+
+.elevator-car {
+
+    position: absolute;
+
+    left: 10px;
+
+    width: 70px;
+    height: 90px;
+
+    top: 0;
+
+    border: 1px solid #777;
+
+    background: #171717;
+
+    transition:
+        top 1.2s cubic-bezier(.65,0,.35,1);
+}
+
+
+/* Doors */
+
+.door {
+
+    position: absolute;
+
+    top: 0;
+
+    width: 50%;
+    height: 100%;
+
+    background: #252525;
+
+    border: 1px solid #444;
+
+    transition:
+        transform .8s cubic-bezier(.65,0,.35,1);
+}
+
+
+.door.left {
+    left: 0;
+}
+
+
+.door.right {
+    right: 0;
+}
+
+
+.elevator-car.open .door.left {
+    transform: translateX(-100%);
+}
+
+
+.elevator-car.open .door.right {
+    transform: translateX(100%);
+}
+
+
+/* =========================================================
+   FLOOR INDICATOR
+   ========================================================= */
+
+.floor-display {
+
+    position: absolute;
+
+    right: -5px;
+
+    top: -35px;
+
+    font-size: 11px;
+
+    letter-spacing: 2px;
+
+    color: #888;
+
+}
+
+
+/* =========================================================
+   ROOM 01
+   ========================================================= */
+
+.room {
+
+    height: 200vh;
+
+    position: relative;
+
+    background:
+        radial-gradient(
+            circle at center,
+            #252525,
+            #0b0b0b 70%
+        );
+}
+
+
+.room-content {
+
+    position: sticky;
+
+    top: 0;
+
+    height: 100vh;
+
+    display: flex;
+
+    flex-direction: column;
+
+    justify-content: center;
+
+    align-items: center;
+
+    text-align: center;
+}
+
+
+.room-label {
+
+    font-size: 12px;
+
+    letter-spacing: 6px;
+
+    color: #777;
+
+    margin-bottom: 20px;
+}
+
+
+.room-title {
+
+    font-size: clamp(50px, 9vw, 110px);
+
+    letter-spacing: 12px;
+
+    margin-left: 12px;
+
+    opacity: 0;
+
+    transform: translateY(40px);
+
+    transition: 1.2s ease;
+}
+
+
+.room.show .room-title {
+
+    opacity: 1;
+
+    transform: translateY(0);
+}
+
+
+/* =========================================================
+   PRODUCT
+   ========================================================= */
+
+.product {
+
+    position: absolute;
+
+    width: 260px;
+    height: 330px;
+
+    right: 18%;
+
+    top: 50%;
+
+    transform:
+        translateY(-50%)
+        translateX(150px)
+        scale(.8);
+
+    opacity: 0;
+
+    transition:
+        1.5s cubic-bezier(.2,.8,.2,1);
+}
+
+
+.product-box {
+
+    width: 100%;
+    height: 100%;
+
+    background:
+        linear-gradient(
+            135deg,
+            #333,
+            #151515
+        );
+
+    border: 1px solid #555;
+
+    display: flex;
+
+    align-items: center;
+    justify-content: center;
+
+    font-size: 14px;
+
+    letter-spacing: 3px;
+
+    box-shadow:
+        0 30px 80px rgba(0,0,0,.6);
+}
+
+
+.product.show {
+
+    opacity: 1;
+
+    transform:
+        translateY(-50%)
+        translateX(0)
+        scale(1);
+}
+
+
+/* =========================================================
+   CHECK IN
+   ========================================================= */
+
+.checkin {
+
+    margin-top: 35px;
+
+    padding: 15px 30px;
+
+    background: white;
+
+    color: black;
+
+    border: none;
+
+    letter-spacing: 2px;
+
+    font-weight: bold;
+
+    opacity: 0;
+
+    transform: translateY(20px);
+
+    transition: .8s ease;
+}
+
+
+.room.show .checkin {
+
+    opacity: 1;
+
+    transform: translateY(0);
+
+    transition-delay: .5s;
+}
+
+
+
+/* =========================================================
+   ROOM 01 — TOWN / CANAL / CANDY
+   ========================================================= */
+
+.room-town {
+    position: absolute;
+    inset: 0;
+    overflow: hidden;
+    pointer-events: none;
+}
+
+.room-town::after {
+    content: "";
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    height: 25%;
+    background: linear-gradient(
+        160deg,
+        transparent,
+        rgba(0,0,0,.65)
+    );
+}
+
+.town-building {
+    position: absolute;
+    bottom: 19%;
+    width: 90px;
+    height: 150px;
+    background: #171717;
+    border: 1px solid #383838;
+    opacity: .8;
+}
+
+.town-building::after {
+    content: "";
+    position: absolute;
+    inset: 18px 15px;
+    background:
+        repeating-linear-gradient(
+            0deg,
+            #222 0 8px,
+            transparent 8px 22px
+        );
+    opacity: .6;
+}
+
+.b1 { left: 7%; height: 170px; }
+.b2 { left: 19%; height: 125px; }
+.b3 { right: 18%; height: 185px; }
+.b4 { right: 6%; height: 135px; }
+
+.canal {
+    position: absolute;
+    left: 50%;
+    bottom: -8%;
+    width: 190px;
+    height: 78%;
+    transform: translateX(-50%) rotate(5deg);
+    background:
+        linear-gradient(
+            90deg,
+            #090909,
+            #252525 45%,
+            #0b0b0b
+        );
+    border-left: 1px solid #444;
+    border-right: 1px solid #444;
+    opacity: .9;
+}
+
+.bridge {
+    position: absolute;
+    left: 50%;
+    width: 260px;
+    height: 32px;
+    transform: translateX(-50%);
+    background: #2a2a2a;
+    border: 1px solid #555;
+    border-radius: 50%;
+    z-index: 2;
+}
+
+.bridge::before,
+.bridge::after {
+    content: "";
+    position: absolute;
+    top: 28px;
+    width: 3px;
+    height: 65px;
+    background: #444;
+}
+
+.bridge::before { left: 25px; }
+.bridge::after { right: 25px; }
+
+.bridge1 { top: 38%; }
+.bridge2 {
+    top: 58%;
+    transform: translateX(-50%) rotate(-4deg);
+}
+
+/* Candy corn */
+.candy {
+    position: absolute;
+    width: 25px;
+    height: 35px;
+    z-index: 15;
+    cursor: pointer;
+    transition:
+        transform .35s ease,
+        opacity .4s ease;
+}
+
+.candy::before {
+    content: "";
+    position: absolute;
+    left: 1px;
+    top: 0;
+    width: 0;
+    height: 0;
+    border-left: 12px solid transparent;
+    border-right: 12px solid transparent;
+    border-bottom: 35px solid #eee;
+    filter: drop-shadow(0 5px 5px rgba(0,0,0,.5));
+}
+
+.candy::after {
+    content: "";
+    position: absolute;
+    left: 5px;
+    bottom: 4px;
+    width: 15px;
+    height: 8px;
+    background: #b66a3e;
+    border-radius: 0 0 8px 8px;
+}
+
+.candy:hover {
+    transform: scale(1.25) rotate(8deg);
+}
+
+.candy.collected {
+    opacity: 0;
+    transform: scale(2) rotate(25deg);
+    pointer-events: none;
+}
+
+.candy1 { left: 24%; bottom: 28%; }
+.candy2 { right: 24%; bottom: 25%; }
+.candy3 { left: 48%; top: 28%; }
+
+.candy-counter,
+.money-counter {
+    position: absolute;
+    left: 28px;
+    bottom: 28px;
+    z-index: 40;
+    color: #777;
+    font-size: 10px;
+    letter-spacing: 2px;
+}
+
+/* =========================================================
+   ROOM 02 — NIGHT SHIFT
+   ========================================================= */
+
+.room-transition {
+    height: 180vh;
+    position: relative;
+    background: #050505;
+}
+
+.transition-phone {
+    position: sticky;
+    top: 50%;
+    transform: translateY(-50%);
+    margin: 0 auto;
+    width: 300px;
+    height: 590px;
+    background: #050505;
+    border: 7px solid #2b2b2b;
+    border-radius: 38px;
+    box-shadow:
+        0 0 0 2px #111,
+        0 30px 80px rgba(0,0,0,.7);
+    padding: 20px;
+}
+
+.room02 {
+    min-height: 260vh;
+    background:
+        radial-gradient(
+            ellipse at center,
+            #202020 0%,
+            #101010 45%,
+            #030303 100%
+        );
+}
+
+.room02-subtitle {
+    position: absolute;
+    top: calc(50% + 75px);
+    color: #666;
+    font-size: 10px;
+    letter-spacing: 5px;
+}
+
+.night-clock {
+    position: absolute;
+    left: 12%;
+    top: 25%;
+    color: #777;
+    font-family: monospace;
+    font-size: 20px;
+    letter-spacing: 3px;
+    text-shadow: 0 0 12px rgba(255,255,255,.15);
+}
+
+.reception-desk {
+    position: absolute;
+    width: 330px;
+    height: 115px;
+    left: 50%;
+    bottom: 19%;
+    transform: translateX(-50%);
+    background: #0b0b0b;
+    border: 1px solid #333;
+    box-shadow: 0 30px 50px rgba(0,0,0,.8);
+}
+
+.key-board {
+    position: absolute;
+    width: 110px;
+    height: 150px;
+    right: 13%;
+    top: 24%;
+    border: 1px solid #333;
+    background:
+        repeating-linear-gradient(
+            0deg,
+            #111 0,
+            #111 18px,
+            #292929 19px,
+            #111 20px
+        );
+}
+
+.money {
+    position: absolute;
+    width: 48px;
+    height: 25px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: #252525;
+    border: 1px solid #555;
+    color: #aaa;
+    font-size: 12px;
+    cursor: pointer;
+    z-index: 20;
+    box-shadow: 0 8px 20px rgba(0,0,0,.6);
+    transition:
+        transform .3s ease,
+        opacity .4s ease;
+}
+
+.money:hover {
+    transform: scale(1.2) rotate(-4deg);
+}
+
+.money.collected {
+    opacity: 0;
+    transform: scale(2) rotate(20deg);
+    pointer-events: none;
+}
+
+.money1 { left: 20%; bottom: 24%; }
+.money2 { right: 20%; bottom: 28%; }
+.money3 { left: 43%; top: 34%; }
+.money4 { right: 34%; top: 47%; }
+
+.money-counter {
+    display: none;
+}
+
+.money-counter.visible {
+    display: block;
+}
+
+.room02-product {
+    top: 52%;
+    right: 16%;
+}
+
+
+/* =========================================================
+   MOBILE ADDITIONS
+   ========================================================= */
+
+@media(max-width:700px) {
+
+    .town-building {
+        transform: scale(.7);
+        transform-origin: bottom;
+    }
+
+    .canal {
+        width: 130px;
+    }
+
+    .bridge {
+        width: 190px;
+    }
+
+    .transition-phone {
+        width: 280px;
+        height: 570px;
+    }
+
+    .reception-desk {
+        width: 240px;
+    }
+
+    .key-board {
+        right: 5%;
+    }
+
+    .night-clock {
+        left: 7%;
+    }
+
+    .room02-product {
+        right: 50%;
+        top: 55%;
+        transform:
+            translateY(-50%)
+            translateX(100px)
+            scale(.8);
+    }
+
+    .room02-product.show {
+        transform:
+            translateY(-50%)
+            translateX(0)
+            scale(1);
+    }
+}
+
+
+/* =========================================================
+   MOBILE
+   ========================================================= */
+
+@media(max-width:700px) {
+
+    .elevator {
+
+        right: 5px;
+
+        transform:
+            translateY(-50%)
+            scale(.7);
+
+        transform-origin: right center;
+    }
+
+
+    .product {
+
+        position: relative;
+
+        right: auto;
+
+        top: auto;
+
+        margin-top: 50px;
+
+        width: 200px;
+
+        height: 250px;
+    }
+
+
+    .room-content {
+
+        padding: 20px;
+    }
+
+}
+
+</style>
+</head>
+
+
+<body>
+
+
+<!-- =========================================================
+     STORY INTRO
+     ========================================================= -->
+
+<div class="story">
+
+    <div class="story-screen">
+
+
+        <!-- PHONE -->
+
+        <div class="phone" id="phone">
+
+            <div class="phone-top">
+                11:43 PM
+            </div>
+
+
+            <div class="messages">
+
+                <div class="message me">
+                    Hey! I got to the hotel now.
+                    Going to check in 😘
+                    Love yall!
+                </div>
+
+
+                <div class="message parent">
+                    Okay ❤️
+                    Let us know when you're inside.
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <!-- HOTEL -->
+
+        <div class="hotel" id="hotel">
+
+            <div class="hotel-name">
+                HOTELØ
+            </div>
+
+            <div class="hotel-year">
+                EST. 1952
+            </div>
+
+            <div class="hotel-description">
+                A forgotten hotel somewhere between arrival and departure.
+            </div>
+
+            <div class="entrance">
+
+                <div class="entrance-light"></div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+
+<!-- =========================================================
+     FIXED ELEVATOR
+     ========================================================= -->
+
+<div class="elevator">
+
+    <div class="elevator-line"></div>
+
+
+    <div class="elevator-car" id="elevatorCar">
+
+        <div class="floor-display" id="floorDisplay">
+            E
+        </div>
+
+        <div class="door left"></div>
+
+        <div class="door right"></div>
+
+    </div>
+
+</div>
+
+
+<!-- =========================================================
+     ROOM 01
+     ========================================================= -->
+
+<section class="room" id="room01">
+
+    <div class="room-content">
+
+        <div class="room-label">
+            HOTELØ / FLOOR 01
+        </div>
+
+        <h1 class="room-title">
+            ROOM 01
+        </h1>
+
+        <button class="checkin">
+            CHECK IN
+        </button>
+
+        <!-- ROOM 01 ENVIRONMENT -->
+        <div class="room-town">
+
+            <div class="town-building b1"></div>
+            <div class="town-building b2"></div>
+            <div class="town-building b3"></div>
+            <div class="town-building b4"></div>
+
+            <div class="canal"></div>
+
+            <div class="bridge bridge1"></div>
+            <div class="bridge bridge2"></div>
+
+        </div>
+
+        <!-- ROOM 01 CANDY CORN COLLECTIBLES -->
+        <div class="candy candy1" data-candy="1" title="Candy Corn"></div>
+        <div class="candy candy2" data-candy="2" title="Candy Corn"></div>
+        <div class="candy candy3" data-candy="3" title="Candy Corn"></div>
+        <div class="candy-counter" id="candyCounter">
+            CANDY CORN — <span id="candyCount">0</span>/3
+        </div>
+
+        <div class="product" id="product">
+
+            <div class="product-box">
+                HOTELØ HOODIE
+            </div>
+
+        </div>
+
+    </div>
+
+</section>
+
+
+<!-- =========================================================
+     ROOM 01 → ROOM 02 STORY TRANSITION
+     ========================================================= -->
+
+<section class="room-transition" id="room02Transition">
+
+    <div class="transition-phone">
+
+        <div class="phone-top">
+            12:08 AM
+        </div>
+
+        <div class="messages">
+
+            <div class="message me">
+                You know what happened?
+            </div>
+
+            <div class="message me">
+                They asked me to work tonight
+                because they're short staffed.
+            </div>
+
+            <div class="message me">
+                They said they'll pay me as soon
+                as the night shift finishes.
+            </div>
+
+            <div class="message parent">
+                Wait... you're actually working there tonight? 😭
+            </div>
+
+            <div class="message me">
+                Apparently 😂
+            </div>
+
+        </div>
+
+    </div>
+
+</section>
+
+
+<!-- =========================================================
+     ROOM 02 — NIGHT SHIFT
+     ========================================================= -->
+
+<section class="room room02" id="room02">
+
+    <div class="room-content">
+
+        <div class="room-label">
+            HOTELØ / FLOOR 02
+        </div>
+
+        <h1 class="room-title">
+            ROOM 02
+        </h1>
+
+        <div class="room02-subtitle">
+            NIGHT SHIFT
+        </div>
+
+        <div class="night-clock">
+            02:17
+        </div>
+
+        <div class="reception-desk"></div>
+
+        <div class="key-board"></div>
+
+        <!-- MONEY COLLECTIBLES -->
+
+        <div class="money money1" data-money="1">$</div>
+        <div class="money money2" data-money="2">$</div>
+        <div class="money money3" data-money="3">$</div>
+        <div class="money money4" data-money="4">$</div>
+
+        <div class="money-counter" id="moneyCounter">
+            NIGHT SHIFT PAY — <span id="moneyCount">0</span>/4
+        </div>
+
+        <div class="product room02-product" id="room02Product">
+
+            <div class="product-box">
+                NIGHT SHIFT HOODIE
+            </div>
+
+        </div>
+
+    </div>
+
+</section>
+
+
+
+<script>
+
+/* =========================================================
+   ELEMENTS
+   ========================================================= */
+
+const phone = document.getElementById("phone");
+const hotel = document.getElementById("hotel");
+const elevator = document.getElementById("elevatorCar");
+const floorDisplay = document.getElementById("floorDisplay");
+
+const room01 = document.getElementById("room01");
+const room02Transition = document.getElementById("room02Transition");
+const room02 = document.getElementById("room02");
+
+const product = document.getElementById("product");
+const room02Product = document.getElementById("room02Product");
+
+const candyCounter = document.getElementById("candyCounter");
+const candyCount = document.getElementById("candyCount");
+
+const moneyCounter = document.getElementById("moneyCounter");
+const moneyCount = document.getElementById("moneyCount");
+
+let collectedCandy = 0;
+let collectedMoney = 0;
+let currentFloor = "";
+
+
+/* =========================================================
+   COLLECTIBLE CANDY CORN
+   ========================================================= */
+
+document.querySelectorAll(".candy").forEach(candy => {
+
+    candy.addEventListener("click", () => {
+
+        if (candy.classList.contains("collected")) {
+            return;
+        }
+
+        candy.classList.add("collected");
+
+        collectedCandy++;
+
+        candyCount.textContent =
+            collectedCandy;
+
+    });
+
+});
+
+
+/* =========================================================
+   COLLECTIBLE MONEY
+   ========================================================= */
+
+document.querySelectorAll(".money").forEach(money => {
+
+    money.addEventListener("click", () => {
+
+        if (money.classList.contains("collected")) {
+            return;
+        }
+
+        money.classList.add("collected");
+
+        collectedMoney++;
+
+        moneyCount.textContent =
+            collectedMoney;
+
+    });
+
+});
+
+
+/* =========================================================
+   ELEVATOR
+   ========================================================= */
+
+function moveElevator(floor, position) {
+
+    elevator.style.top =
+        position + "px";
+
+    floorDisplay.textContent =
+        floor;
+
+    if (currentFloor !== floor) {
+
+        currentFloor = floor;
+
+        elevator.classList.remove("open");
+
+        setTimeout(() => {
+
+            elevator.classList.add("open");
+
+        }, 500);
+
+        setTimeout(() => {
+
+            elevator.classList.remove("open");
+
+        }, 1600);
+
+    }
+
+}
+
+
+/* =========================================================
+   MAIN SCROLL SYSTEM
+   ========================================================= */
+
+window.addEventListener("scroll", () => {
+
+    const scroll =
+        window.scrollY;
+
+    const screenHeight =
+        window.innerHeight;
+
+
+    /* =====================================================
+       INTRO PHONE → HOTEL
+       ===================================================== */
+
+    if (scroll < screenHeight * .65) {
+
+        hotel.classList.remove("visible");
+
+        phone.style.opacity =
+            "1";
+
+        phone.style.transform =
+            "scale(1) translateY(0)";
+
+        moveElevator("E", 0);
+
+    }
+
+    else {
+
+        phone.style.opacity =
+            "0";
+
+        phone.style.transform =
+            "scale(.85) translateY(-80px)";
+
+        hotel.classList.add("visible");
+
+    }
+
+
+    /* =====================================================
+       ROOM 01
+       ===================================================== */
+
+    const room01Top =
+        room01.offsetTop;
+
+    const room01Progress =
+        (scroll - room01Top) /
+        (room01.offsetHeight - screenHeight);
+
+
+    if (
+        scroll >= room01Top &&
+        scroll < room02Transition.offsetTop
+    ) {
+
+        moveElevator("01", 260);
+
+        if (
+            room01Progress > .05 &&
+            room01Progress < 1.1
+        ) {
+
+            room01.classList.add("show");
+
+            candyCounter.style.opacity =
+                "1";
+
+        }
+
+        if (room01Progress > .25) {
+
+            product.classList.add("show");
+
+        }
+        else {
+
+            product.classList.remove("show");
+
+        }
+
+    }
+
+
+    /* =====================================================
+       ROOM 01 → ROOM 02 PHONE
+       ===================================================== */
+
+    if (
+        scroll >= room02Transition.offsetTop &&
+        scroll < room02.offsetTop
+    ) {
+
+        moveElevator("01", 260);
+
+        candyCounter.style.opacity =
+            "0";
+
+    }
+
+
+    /* =====================================================
+       ROOM 02
+       ===================================================== */
+
+    if (scroll >= room02.offsetTop) {
+
+        moveElevator("02", 390);
+
+        const room02Progress =
+            (scroll - room02.offsetTop) /
+            (room02.offsetHeight - screenHeight);
+
+
+        if (
+            room02Progress > .03 &&
+            room02Progress < 1.1
+        ) {
+
+            room02.classList.add("show");
+
+            moneyCounter.classList.add("visible");
+
+        }
+
+
+        if (room02Progress > .18) {
+
+            room02Product.classList.add("show");
+
+        }
+        else {
+
+            room02Product.classList.remove("show");
+
+        }
+
+    }
+
+});
+
+
+/* =========================================================
+   INITIAL STATE
+   ========================================================= */
+
+moveElevator("E", 0);
+
+</script>
+
+</body>
+</html>
