@@ -1,4 +1,1143 @@
-transition: right .5s ease;
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>HOTELØ — Est. 1952</title>
+
+<style>
+
+/* =========================================================
+   GLOBAL
+   ========================================================= */
+
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+html {
+    scroll-behavior: smooth;
+}
+
+body {
+    background: #080808;
+    color: #eee;
+    font-family: Arial, Helvetica, sans-serif;
+    overflow-x: hidden;
+}
+
+button {
+    font: inherit;
+}
+
+.hidden {
+    display: none !important;
+}
+
+
+/* =========================================================
+   GLOBAL TRANSITION / SECTION SYSTEM
+   ========================================================= */
+
+.scene {
+    position: relative;
+    width: 100%;
+}
+
+.room {
+    min-height: 220vh;
+    position: relative;
+    overflow: hidden;
+}
+
+.phone-transition {
+    min-height: 180vh;
+    position: relative;
+    background: #050505;
+}
+
+.sticky-screen {
+    position: sticky;
+    top: 0;
+    height: 100vh;
+    overflow: hidden;
+}
+
+
+/* =========================================================
+   INTRO
+   ========================================================= */
+
+.intro {
+    height: 300vh;
+    position: relative;
+}
+
+.intro-screen {
+    position: sticky;
+    top: 0;
+    height: 100vh;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    overflow: hidden;
+}
+
+.intro-phone {
+    width: 300px;
+    height: 590px;
+
+    background: #a4a4a4;
+    border: 7px solid #2b2b2b;
+    border-radius: 38px;
+
+    padding: 20px;
+
+    box-shadow:
+        0 0 0 2px #111,
+        0 30px 80px rgba(0,0,0,.7);
+
+    position: relative;
+
+    transition:
+        transform 1s ease,
+        opacity 1s ease;
+}
+
+.phone-time {
+    text-align: center;
+    color: #555;
+    font-size: 11px;
+    margin-bottom: 40px;
+}
+
+.messages {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+
+.message {
+    max-width: 85%;
+    padding: 13px 15px;
+
+    border-radius: 18px;
+
+    font-size: 14px;
+    line-height: 1.4;
+
+    opacity: 0;
+    transform: translateY(15px);
+
+    animation: messageIn .7s forwards;
+}
+
+.message.me {
+    align-self: flex-end;
+    background: #eee;
+    color: #111;
+}
+
+.message.parent {
+    align-self: flex-start;
+    background: #252525;
+    color: white;
+}
+
+@keyframes messageIn {
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+
+/* Intro hotel */
+
+.hotel-reveal {
+    position: absolute;
+    inset: 0;
+
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+
+    background:
+        linear-gradient(
+            rgba(0,0,0,.45),
+            rgba(0,0,0,.65)
+        ),
+        url("andrew-wang-m796b1IdC40-unsplash.jpg")
+        center / cover;
+
+    opacity: 0;
+    transform: scale(1.08);
+
+    transition:
+        opacity 2s ease,
+        transform 3s cubic-bezier(.2,.8,.2,1);
+}
+
+.hotel-reveal.visible {
+    opacity: 1;
+    transform: scale(1);
+}
+
+.hotel-name {
+    font-size: clamp(55px, 10vw, 130px);
+    font-weight: 700;
+
+    letter-spacing: 18px;
+    margin-left: 18px;
+}
+
+.hotel-year {
+    margin-top: 20px;
+
+    color: #bbb;
+    font-size: 12px;
+    letter-spacing: 7px;
+}
+
+.hotel-description {
+    margin-top: 15px;
+
+    color: #aaa;
+    font-size: 13px;
+    letter-spacing: 2px;
+
+    text-align: center;
+}
+
+
+/* =========================================================
+   ELEVATOR
+   ========================================================= */
+
+.elevator {
+    position: fixed;
+
+    right: 35px;
+    top: 50%;
+
+    width: 90px;
+    height: 430px;
+
+    transform: translateY(-50%);
+
+    z-index: 5000;
+    pointer-events: none;
+}
+
+.elevator-line {
+    position: absolute;
+
+    left: 50%;
+    top: 0;
+    bottom: 0;
+
+    width: 2px;
+
+    transform: translateX(-50%);
+
+    background: #333;
+}
+
+.elevator-car {
+    position: absolute;
+
+    left: 10px;
+    top: 0;
+
+    width: 70px;
+    height: 90px;
+
+    background: #171717;
+    border: 1px solid #777;
+    transition:
+        top 1s cubic-bezier(.65,0,.35,1);
+}
+
+.door {
+    position: absolute;
+
+    top: 0;
+
+    width: 50%;
+    height: 100%;
+
+    background: #252525;
+    border: 1px solid #444;
+
+    transition:
+        transform .8s cubic-bezier(.65,0,.35,1);
+}
+
+.door.left {
+    left: 0;
+}
+
+.door.right {
+    right: 0;
+}
+
+.elevator-car.open .door.left {
+    transform: translateX(-100%);
+}
+
+.elevator-car.open .door.right {
+    transform: translateX(100%);
+}
+
+.floor-display {
+    position: absolute;
+
+    right: -5px;
+    top: -35px;
+
+    color: #888;
+
+    font-size: 11px;
+    letter-spacing: 2px;
+}
+
+
+/* =========================================================
+   GENERIC ROOM STRUCTURE
+   ========================================================= */
+
+.room-screen {
+    position: sticky;
+    top: 0;
+
+    height: 100vh;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    overflow: hidden;
+}
+
+.room-info {
+    position: absolute;
+
+    top: 80px;
+    left: 50%;
+
+    transform: translateX(-50%);
+
+    text-align: center;
+
+    z-index: 20;
+}
+
+.room-floor {
+    color: #777;
+    font-size: 11px;
+    letter-spacing: 6px;
+
+    margin-bottom: 18px;
+}
+
+.room-title {
+    font-size: clamp(48px, 9vw, 110px);
+    letter-spacing: 12px;
+
+    margin-left: 12px;
+}
+
+.room-subtitle {
+    margin-top: 12px;
+
+    color: #777;
+
+    font-size: 10px;
+    letter-spacing: 5px;
+}
+
+
+/* =========================================================
+   ROOM 01 — ENTRY / CHECK-IN
+   ========================================================= */
+
+.room01 {
+    background:
+        linear-gradient(
+            rgba(0,0,0,.35),
+            rgba(0,0,0,.75)
+        ),
+        url("view-luxurious-hotel-hallway.jpg")
+        center / cover;
+}
+
+.room01-town {
+    position: absolute;
+    inset: 0;
+}
+
+.building {
+    position: absolute;
+
+    bottom: 15%;
+
+    width: 110px;
+    height: 170px;
+
+    background: #171717;
+    border: 1px solid #444;
+}
+
+.building:nth-child(1) {
+    left: 6%;
+}
+
+.building:nth-child(2) {
+    left: 20%;
+    height: 130px;
+}
+
+.building:nth-child(3) {
+    right: 20%;
+    height: 190px;
+}
+
+.building:nth-child(4) {
+    right: 6%;
+    height: 145px;
+}
+
+.canal {
+    position: absolute;
+
+    left: 50%;
+    bottom: -10%;
+
+    width: 190px;
+    height: 85%;
+
+    transform:
+        translateX(-50%)
+        rotate(5deg);
+
+    background:
+        linear-gradient(
+            90deg,
+            #080808,
+            #292929,
+            #080808
+        );
+
+    border-left: 1px solid #555;
+    border-right: 1px solid #555;
+}
+
+.bridge {
+    position: absolute;
+
+    left: 50%;
+
+    width: 270px;
+    height: 35px;
+
+    transform: translateX(-50%);
+
+    background: #292929;
+
+    border: 1px solid #555;
+    border-radius: 50%;
+
+    z-index: 5;
+}
+
+.bridge.one {
+    top: 40%;
+}
+
+.bridge.two {
+    top: 60%;
+    transform:
+        translateX(-50%)
+        rotate(-4deg);
+}
+
+
+/* =========================================================
+   COLLECTIBLES
+   ========================================================= */
+
+.collectible {
+    position: absolute;
+
+    z-index: 50;
+
+    cursor: pointer;
+
+    transition:
+        transform .3s ease,
+        opacity .4s ease;
+}
+
+.collectible:hover {
+    transform: scale(1.2);
+}
+
+.collectible.collected {
+    opacity: 0;
+    transform: scale(2);
+    pointer-events: none;
+}
+
+.candy {
+    width: 25px;
+    height: 35px;
+}
+
+.candy::before {
+    content: "";
+
+    position: absolute;
+
+    width: 0;
+    height: 0;
+
+    border-left: 12px solid transparent;
+    border-right: 12px solid transparent;
+    border-bottom: 35px solid #eee;
+}
+
+.candy.one {
+    left: 24%;
+    bottom: 25%;
+}
+
+.candy.two {
+    right: 25%;
+    bottom: 30%;
+}
+
+.candy.three {
+    left: 48%;
+    top: 28%;
+}
+
+.collect-counter {
+    position: absolute;
+
+    left: 28px;
+    bottom: 28px;
+
+    z-index: 100;
+
+    color: #888;
+
+    font-size: 10px;
+    letter-spacing: 2px;
+}
+
+
+/* =========================================================
+   PRODUCT AREA
+   ========================================================= */
+
+.product-area {
+    position: absolute;
+    right: 10%;
+    bottom: 18%;
+
+    width: 300px;
+
+    z-index: 100;
+}
+
+.product-grid {
+    display: flex;
+    gap: 15px;
+
+    flex-wrap: wrap;
+}
+
+.product-card {
+    width: 135px;
+    height: 180px;
+
+    background:
+        linear-gradient(
+            135deg,
+            #333,
+            #151515
+        );
+
+    border: 1px solid #555;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    text-align: center;
+
+    color: #aaa;
+
+    font-size: 11px;
+    letter-spacing: 2px;
+
+    cursor: pointer;
+
+    transition:
+        transform .3s ease,
+        border-color .3s ease;
+}
+
+.product-card:hover {
+    transform: translateY(-8px);
+    border-color: #aaa;
+}
+
+
+/* =========================================================
+   CHECK IN
+   ========================================================= */
+
+.checkin {
+    position: absolute;
+
+    bottom: 12%;
+    left: 50%;
+
+    transform: translateX(-50%);
+
+    z-index: 100;
+
+    padding: 14px 30px;
+
+    background: white;
+    color: black;
+
+    border: none;
+
+    letter-spacing: 2px;
+    font-weight: bold;
+
+    cursor: pointer;
+}
+
+
+/* =========================================================
+   PHONE TRANSITIONS
+   ========================================================= */
+
+.phone-transition {
+    background: #050505;
+}
+
+.phone-screen {
+    position: sticky;
+
+    top: 0;
+
+    height: 100vh;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.transition-phone {
+    width: 300px;
+    height: 590px;
+
+    background: #080808;
+
+    border: 7px solid #2b2b2b;
+    border-radius: 38px;
+
+    padding: 20px;
+
+    box-shadow:
+        0 0 0 2px #111,
+        0 30px 80px rgba(0,0,0,.7);
+}
+
+
+/* =========================================================
+   ROOM 02 — NIGHT SHIFT
+   ========================================================= */
+
+.room02 {
+    background:
+        radial-gradient(
+            ellipse at center,
+            #252525,
+            #090909 70%
+        );
+}
+
+.reception {
+    position: absolute;
+
+    left: 50%;
+    bottom: 20%;
+
+    transform: translateX(-50%);
+
+    width: 340px;
+    height: 120px;
+
+    background: #0b0b0b;
+    border: 1px solid #444;
+
+    box-shadow:
+        0 30px 60px rgba(0,0,0,.8);
+}
+
+.clock {
+    position: absolute;
+
+    left: 12%;
+    top: 28%;
+
+    font-family: monospace;
+
+    font-size: 22px;
+    letter-spacing: 3px;
+
+    color: #777;
+}
+
+.money {
+    width: 50px;
+    height: 27px;
+
+    background: #252525;
+
+    border: 1px solid #555;
+
+    color: #aaa;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.money.one {
+    left: 20%;
+    bottom: 25%;
+}
+
+.money.two {
+    right: 20%;
+    bottom: 28%;
+}
+
+.money.three {
+    left: 43%;
+    top: 34%;
+}
+
+.money.four {
+    right: 33%;
+    top: 47%;
+}
+
+
+/* =========================================================
+   ROOM 03 — RESTRICTED
+   ========================================================= */
+
+.room03 {
+    background:
+        radial-gradient(
+            circle at center,
+            #202020,
+            #030303 75%
+        );
+}
+
+.access-denied {
+    position: absolute;
+
+    top: 50%;
+    left: 50%;
+
+    transform: translate(-50%, -50%);
+
+    width: min(700px, 80%);
+
+    padding: 80px 30px;
+
+    border: 1px solid #444;
+
+    text-align: center;
+
+    background: rgba(0,0,0,.55);
+}
+
+.access-denied h2 {
+    font-size: clamp(35px, 7vw, 80px);
+    letter-spacing: 10px;
+}
+
+.access-denied p {
+    margin-top: 20px;
+
+    color: #777;
+
+    font-size: 11px;
+    letter-spacing: 3px;
+}
+
+.verify-button {
+    margin-top: 35px;
+
+    padding: 13px 25px;
+
+    background: transparent;
+
+    border: 1px solid #777;
+
+    color: white;
+
+    cursor: pointer;
+
+    letter-spacing: 2px;
+}
+
+.access-status {
+    margin-top: 20px;
+
+    min-height: 15px;
+
+    color: #777;
+
+    font-size: 10px;
+    letter-spacing: 2px;
+}
+
+
+/* =========================================================
+   ROOM 04 — SIGNAL LOSS
+   ========================================================= */
+
+.room04 {
+    background:
+        repeating-linear-gradient(
+            0deg,
+            #080808 0,
+            #080808 3px,
+            #101010 4px
+        );
+}
+
+.signal-box {
+    position: absolute;
+
+    top: 50%;
+    left: 50%;
+
+    transform: translate(-50%, -50%);
+
+    text-align: center;
+}
+
+.signal-icon {
+    font-family: monospace;
+
+    font-size: 60px;
+
+    letter-spacing: 10px;
+}
+
+.signal-status {
+    margin-top: 20px;
+
+    color: #666;
+
+    font-family: monospace;
+
+    font-size: 11px;
+    letter-spacing: 4px;
+}
+
+.signal-button {
+    margin-top: 30px;
+
+    padding: 12px 25px;
+
+    background: transparent;
+
+    color: white;
+
+    border: 1px solid #555;
+
+    cursor: pointer;
+}
+
+
+/* =========================================================
+   ROOM 05 — EXIT / PENTHOUSE
+   ========================================================= */
+
+.room05 {
+    background:
+        radial-gradient(
+            ellipse at center,
+            #444,
+            #090909 75%
+        );
+}
+
+.penthouse {
+    position: absolute;
+
+    inset: 0;
+
+    display: flex;
+    flex-direction: column;
+
+    align-items: center;
+    justify-content: center;
+
+    text-align: center;
+}
+
+.penthouse-label {
+    color: #888;
+
+    font-size: 11px;
+    letter-spacing: 7px;
+}
+
+.penthouse h2 {
+    margin-top: 20px;
+
+    font-size: clamp(55px, 10vw, 120px);
+
+    letter-spacing: 15px;
+}
+
+.exit-button {
+    margin-top: 40px;
+
+    padding: 16px 40px;
+
+    background: white;
+    color: black;
+
+    border: none;
+
+    cursor: pointer;
+
+    letter-spacing: 3px;
+}
+
+
+/* =========================================================
+   PRODUCT VIEWER
+   ========================================================= */
+
+.product-viewer {
+    position: fixed;
+
+    inset: 0;
+
+    z-index: 9000;
+
+    background: rgba(0,0,0,.94);
+
+    display: none;
+
+    align-items: center;
+    justify-content: center;
+
+    padding: 30px;
+}
+
+.product-viewer.active {
+    display: flex;
+}
+
+.product-window {
+    width: min(1000px, 95vw);
+    max-height: 90vh;
+
+    overflow: auto;
+
+    background: #111;
+
+    border: 1px solid #444;
+
+    padding: 30px;
+
+    display: grid;
+
+    grid-template-columns: 1fr 1fr;
+
+    gap: 40px;
+
+    position: relative;
+}
+
+.viewer-image {
+    min-height: 450px;
+
+    background:
+        linear-gradient(
+            135deg,
+            #333,
+            #111
+        );
+
+    border: 1px solid #444;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    text-align: center;
+
+    color: #888;
+
+    letter-spacing: 3px;
+}
+
+.viewer-details h2 {
+    font-size: 28px;
+    letter-spacing: 4px;
+}
+
+.viewer-details p {
+    margin-top: 20px;
+
+    color: #888;
+
+    line-height: 1.6;
+}
+
+.viewer-price {
+    margin-top: 20px;
+
+    font-size: 18px;
+}
+
+.option-label {
+    margin-top: 25px;
+
+    color: #777;
+
+    font-size: 10px;
+
+    letter-spacing: 3px;
+}
+
+.options {
+    display: flex;
+
+    gap: 8px;
+
+    flex-wrap: wrap;
+
+    margin-top: 10px;
+}
+
+.option {
+    padding: 9px 13px;
+
+    background: transparent;
+
+    border: 1px solid #444;
+
+    color: white;
+
+    cursor: pointer;
+}
+
+.option.selected {
+    border-color: white;
+}
+
+.add-to-bag {
+    margin-top: 30px;
+
+    width: 100%;
+
+    padding: 15px;
+
+    background: white;
+
+    color: black;
+
+    border: none;
+
+    cursor: pointer;
+
+    letter-spacing: 2px;
+}
+
+.close-viewer {
+    position: absolute;
+
+    top: 15px;
+    right: 15px;
+
+    background: transparent;
+
+    color: white;
+
+    border: none;
+
+    font-size: 25px;
+
+    cursor: pointer;
+}
+
+
+/* =========================================================
+   CART
+   ========================================================= */
+
+.cart-button {
+    position: fixed;
+
+    right: 30px;
+    bottom: 30px;
+
+    z-index: 6000;
+
+    padding: 12px 18px;
+
+    background: #eee;
+    color: #111;
+
+    border: none;
+
+    cursor: pointer;
+
+    letter-spacing: 2px;
+}
+
+.cart-panel {
+    position: fixed;
+
+    top: 0;
+    right: -420px;
+
+    width: min(420px, 90vw);
+    height: 100vh;
+
+    z-index: 9500;
+
+    background: #111;
+
+    border-left: 1px solid #444;
+
+    padding: 30px;
+    transition: right .5s ease;
 }
 
 .cart-panel.open {
